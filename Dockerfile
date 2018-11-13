@@ -1,5 +1,5 @@
 ## docker build -t php:7.0 .
-FROM php:7.1.22-apache-stretch
+FROM php:7.2.10-apache-stretch
 
 RUN apt-get update
 RUN pecl install xdebug
