@@ -1,7 +1,8 @@
-FROM php:5.6.37-apache-jessie
+## docker build -t php:7.0 .
+FROM php:7.0.32-apache-stretch
 
 RUN apt-get update
-## RUN pecl install xdebug
+RUN pecl install xdebug
 
 RUN apt-get install -y libbz2-dev
 RUN apt-get install -y zlib1g-dev
@@ -22,7 +23,9 @@ RUN docker-php-ext-install bz2
 RUN docker-php-ext-install calendar
 RUN docker-php-ext-install ctype
 RUN docker-php-ext-install fileinfo
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-configure gd \
+    --with-freetype-dir=/usr/include/ \
+    --with-jpeg-dir=/usr/include/
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install intl
 RUN docker-php-ext-install mysqli
@@ -33,13 +36,18 @@ RUN docker-php-ext-install zip
 COPY dockerfiles/php.ini /usr/local/etc/php/
 COPY dockerfiles/default-ssl.conf /etc/apache2/sites-available
 COPY dockerfiles/000-default.conf /etc/apache2/sites-available
-#COPY dockerfiles/xdebug.ini /tmp/xdebug.ini
+COPY dockerfiles/xdebug.ini /tmp/xdebug.ini
 
-#ENV XDEBUGINI_PATH=/usr/local/etc/php/conf.d/xdebug.ini
-#RUN echo "zend_extension="`find /usr/local/lib/php/extensions/ -iname 'xdebug.so'` > $XDEBUGINI_PATH
-#RUN cat /tmp/xdebug.ini >> $XDEBUGINI_PATH
+ENV XDEBUGINI_PATH=/usr/local/etc/php/conf.d/xdebug.ini
+RUN echo "zend_extension="`find /usr/local/lib/php/extensions/ -iname 'xdebug.so'` > $XDEBUGINI_PATH
+RUN cat /tmp/xdebug.ini >> $XDEBUGINI_PATH
 
-RUN openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/C=MX/ST=Mexico/L=MExico/O=Security/OU=Desarrollo/CN=limonazzo.com"
+RUN openssl req -x509 \
+    -nodes -days 3650 \
+    -newkey rsa:2048 \
+    -keyout /etc/ssl/private/ssl-cert-snakeoil.key \
+    -out /etc/ssl/certs/ssl-cert-snakeoil.pem \
+    -subj "/C=MX/ST=Mexico/L=MExico/O=Security/OU=Desarrollo/CN=limonazzo.com"
 RUN a2enmod rewrite
 RUN a2ensite default-ssl
 RUN a2enmod ssl
@@ -82,12 +90,12 @@ RUN npm install @angular/cli -g
 RUN npm install -g brunch
 
 ## Yarn
-#RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-#RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-#RUN apt-get install -y yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get install -y yarn
 
 ## PArcel
-#RUN npm install -g parcel-bundler 
+RUN npm install -g parcel-bundler 
 
 WORKDIR /var/www/html
 
