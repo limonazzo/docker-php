@@ -30,6 +30,10 @@ RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install soap
 RUN docker-php-ext-install zip
 
+RUN apt install libmcrypt-dev
+RUN docker-php-ext-configure mcrypt
+RUN docker-php-ext-install mcrypt
+
 COPY dockerfiles/php.ini /usr/local/etc/php/
 COPY dockerfiles/default-ssl.conf /etc/apache2/sites-available
 COPY dockerfiles/000-default.conf /etc/apache2/sites-available
