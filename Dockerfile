@@ -30,7 +30,7 @@ RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install soap
 RUN docker-php-ext-install zip
 
-RUN apt install libmcrypt-dev
+RUN apt install -y libmcrypt-dev
 RUN docker-php-ext-configure mcrypt
 RUN docker-php-ext-install mcrypt
 
