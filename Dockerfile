@@ -1,5 +1,5 @@
-## docker build -t php:7.0 .
-FROM php:7.2.10-apache-stretch
+## docker build -t php:7.3 .
+FROM php:7.3.13-apache-stretch
 
 RUN apt-get update
 RUN pecl install xdebug
@@ -17,6 +17,7 @@ RUN apt-get install -y git
 RUN apt-get install -y zip
 RUN apt-get install -y unzip
 RUN apt-get install -y sudo
+RUN apt-get install -y libzip-dev
 
 RUN docker-php-ext-install bcmath
 RUN docker-php-ext-install bz2
@@ -55,13 +56,14 @@ RUN a2enmod ssl
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php
 RUN cp composer.phar /usr/bin/composer
-
+RUN mkdir /var/www/.composer
+RUN chown -R www-data:www-data /var/www/.composer
 
 # FrontEndTools:
 
 ## Node 
 RUN apt-get install -y gnupg2
-RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential
 
